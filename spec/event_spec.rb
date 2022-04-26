@@ -138,4 +138,10 @@ describe Event do
     }
     expect(event.total_inventory).to eq(expected)
   end
+
+  it 'can return the date of the event' do
+    allow(Date).to receive(:today).and_return Date.new(2020, 2, 24)
+    event = Event.new('South Pearl Street Farmers Market')
+    expect(event.date).to eq('24/02/2020')
+  end
 end
