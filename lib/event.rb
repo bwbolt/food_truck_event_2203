@@ -1,9 +1,12 @@
+require 'date'
+
 class Event
-  attr_reader :name, :food_trucks
+  attr_reader :name, :food_trucks, :date
 
   def initialize(name)
     @name = name
     @food_trucks = []
+    @date = Date.today.strftime '%d/%m/%Y'
   end
 
   def add_food_truck(food_truck)
@@ -42,5 +45,29 @@ class Event
       end
     end
     items
+  end
+
+  def sell(item, amount)
+    if total_inventory[item].nil? || total_inventory[item][:quantity] < amount
+      false
+    else
+      sell_by_truck(item, amount)
+      true
+    end
+  end
+
+  def sell_by_truck(item, amount)
+    total_left = amount
+    until total_left == 0
+      @food_trucks.each do |truck|
+        if truck.inventory[item] <= total_left
+          total_left -= truck.inventory[item]
+          truck.sell_item(item, truck.inventory[item])
+        else
+          truck.sell_item(item, total_left)
+          total_left -= total_left
+        end
+      end
+    end
   end
 end
