@@ -48,4 +48,14 @@ describe FoodTruck do
     expect(food_truck2.potential_revenue).to eq(345.00)
     expect(food_truck3.potential_revenue).to eq(243.75)
   end
+
+  it 'can sell an item' do
+    item1 = Item.new({ name: 'Peach Pie (Slice)', price: '$3.75' })
+    item2 = Item.new({ name: 'Apple Pie (Slice)', price: '$2.50' })
+    food_truck = FoodTruck.new('Rocky Mountain Pies')
+    food_truck.stock(item1, 30)
+    expect(food_truck.check_stock(item1)).to eq(30)
+    food_truck.sell_item(item1, 15)
+    expect(food_truck.check_stock(item1)).to eq(15)
+  end
 end
