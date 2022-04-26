@@ -51,19 +51,23 @@ class Event
     if total_inventory[item].nil? || total_inventory[item][:quantity] < amount
       false
     else
-      total_left = amount
-      until total_left == 0
-        @food_trucks.each do |truck|
-          if truck.inventory[item] <= total_left
-            total_left -= truck.inventory[item]
-            truck.sell_item(item, truck.inventory[item])
-          else
-            truck.sell_item(item, total_left)
-            total_left -= total_left
-          end
+      sell_by_truck(item, amount)
+      true
+    end
+  end
+
+  def sell_by_truck(item, amount)
+    total_left = amount
+    until total_left == 0
+      @food_trucks.each do |truck|
+        if truck.inventory[item] <= total_left
+          total_left -= truck.inventory[item]
+          truck.sell_item(item, truck.inventory[item])
+        else
+          truck.sell_item(item, total_left)
+          total_left -= total_left
         end
       end
-      true
     end
   end
 end
